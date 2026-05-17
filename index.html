@@ -240,7 +240,7 @@
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="nav-brand">The <span>Daily Brief</span></div>
+  <div class="nav-brand">The <span>Pucił News</span></div>
   <div class="nav-right" id="nav-right"></div>
 </nav>
 
@@ -250,19 +250,19 @@
 <!-- ── LOGIN MODAL ── -->
 <div class="overlay" id="login-overlay">
   <div class="modal">
-    <h2>Sign in</h2>
+    <h2>Zaloguj się</h2>
     <div class="field">
       <label>Username</label>
       <input type="text" id="login-user" placeholder="your username" autocomplete="username">
     </div>
     <div class="field">
-      <label>Password</label>
+      <label>Hasłó</label>
       <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
     </div>
     <div class="err" id="login-err"></div>
     <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
-      <button class="btn-primary" onclick="doLogin()">Sign in</button>
+      <button class="btn-ghost" onclick="closeModals()">Anuluj</button>
+      <button class="btn-primary" onclick="doLogin()">Zaloguj się</button>
     </div>
   </div>
 </div>
@@ -270,13 +270,13 @@
 <!-- ── REGISTER MODAL ── -->
 <div class="overlay" id="register-overlay">
   <div class="modal">
-    <h2>Create account</h2>
+    <h2>Stwórz konto</h2>
     <div class="field">
       <label>Username</label>
       <input type="text" id="reg-user" placeholder="choose a username" autocomplete="username">
     </div>
     <div class="field">
-      <label>Password</label>
+      <label>Hasło</label>
       <input type="password" id="reg-pass" placeholder="at least 4 characters" autocomplete="new-password">
     </div>
     <div class="err" id="reg-err"></div>
@@ -290,8 +290,8 @@
 <script>
   // ── CONFIG ──────────────────────────────────────────────────────────
   // Change the admin password before deploying!
-  const ADMIN_USERNAME = 'admin';
-  const ADMIN_PASSWORD = 'admin123';
+  const ADMIN_USERNAME = 'bartek';
+  const ADMIN_PASSWORD = 'bartek123';
 
   let pendingImage = null; // base64 data URL for the image being composed
 
@@ -325,9 +325,9 @@
     posts: saved ? saved.posts : [
       {
         id: 1,
-        title: 'Welcome to The Daily Brief',
+        title: 'Witaj na Pucił News',
         tag: 'Announcement',
-        body: 'Hello and welcome! This is your go-to place for curated insights, stories, and ideas. New editions drop regularly — create an account to join the conversation and leave comments on any post.',
+        body: 'bla bla bla sranie w banie komentujcie pod postami ziomeczki i będzie gitara',
         date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
         comments: []
       }
@@ -379,8 +379,8 @@
     if (!S.user) {
       html += `
         <div class="auth-cta">
-          <h1>Ideas worth reading.</h1>
-          <p>A newsletter for curious minds. Sign up to read,<br>comment, and join the conversation.</p>
+          <h1>Zajebiste newsy</h1>
+          <p>Newsy jak świeżutkie bułeczki najnowsze 100% legitne</p>
           <div class="auth-cta-btns">
             <button onclick="showLogin()">Sign in</button>
             <button class="btn-primary" onclick="showRegister()">Join free — it's free</button>
@@ -459,7 +459,7 @@
         <div class="comments-section">
           ${items}
           <div class="comment-form">
-            <input type="text" id="ci-${post.id}" placeholder="Write a comment..."
+            <input type="text" id="ci-${post.id}" placeholder="Napisz komentarz..."
               onkeydown="if(event.key==='Enter') submitComment(${post.id})">
             <button class="btn-primary btn-sm" onclick="submitComment(${post.id})">Post</button>
           </div>
@@ -469,7 +469,7 @@
 
     const footerRight = loggedIn
       ? `<button class="btn-ghost btn-sm" onclick="toggleComments(${post.id})">
-           ${exp ? '↑ Hide' : '↓ ' + (post.comments.length > 0 ? 'View comments' : 'Add comment')}
+           ${exp ? '↑ Hide' : '↓ ' + (post.comments.length > 0 ? 'Zobacz komentarze' : 'Dodaj komentarz')}
          </button>`
       : `<button class="btn-ghost btn-sm" onclick="showLogin()">Sign in to comment</button>`;
 
@@ -589,7 +589,7 @@
     const err = document.getElementById('login-err');
     if (!u || !p) { err.textContent = 'Please fill in all fields.'; return; }
     const acc = S.accounts[u];
-    if (!acc || acc.password !== p) { err.textContent = 'Incorrect username or password.'; return; }
+    if (!acc || acc.password !== p) { err.textContent = 'Nieprawidłowy username/hasło'; return; }
     S.user = u;
     closeModals();
     render();
