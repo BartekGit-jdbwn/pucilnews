@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pucił News - #1 najbardziej zaufane źródło informacji</title>
+<title>Pucił News - #1 zaufane źródło Informacji</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -120,7 +120,6 @@
   .field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,0.12); }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
   .err { font-size: 12px; color: #a32d2d; margin-top: 6px; min-height: 18px; }
-  .hint-text { font-size: 11px; color: var(--text-hint); margin-top: 10px; }
 
   /* ── AUTH CTA ── */
   .auth-cta {
@@ -189,6 +188,45 @@
 
   .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 15px; }
 
+  /* ── IMAGE UPLOAD ── */
+  .img-upload-area {
+    border: 1.5px dashed var(--border-mid);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 13px;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .img-upload-area:hover { border-color: var(--accent); background: var(--accent-bg); }
+  .img-upload-area.has-image { padding: 0; border-style: solid; overflow: hidden; }
+  .img-upload-area input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .img-upload-area .upload-label { pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .img-upload-area .upload-icon { font-size: 22px; opacity: 0.5; }
+  .img-preview {
+    width: 100%; max-height: 220px; object-fit: cover;
+    display: block; border-radius: calc(var(--radius) - 1px);
+  }
+  .img-clear-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: rgba(0,0,0,0.55); color: #fff;
+    border: none; border-radius: 6px;
+    font-size: 11px; padding: 3px 8px; cursor: pointer; z-index: 2;
+  }
+  .img-clear-btn:hover { background: rgba(0,0,0,0.8); }
+
+  /* ── POST IMAGE ── */
+  .post-image {
+    width: 100%; max-height: 380px; object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
   @media (max-width: 500px) {
     nav { padding: 0 1rem; }
     .main { padding: 1.5rem 1rem; }
@@ -254,6 +292,8 @@
   // Change the admin password before deploying!
   const ADMIN_USERNAME = 'admin';
   const ADMIN_PASSWORD = 'admin123';
+
+  let pendingImage = null; // base64 data URL for the image being composed
 
   // ── STATE ────────────────────────────────────────────────────────────
   // Accounts & posts are stored in localStorage so they survive page refreshes.
@@ -365,6 +405,17 @@
             <label>Body</label>
             <textarea id="np-body" rows="6" placeholder="Write your post here..."></textarea>
           </div>
+          <div class="field">
+            <label>Cover image (optional)</label>
+            <div class="img-upload-area" id="img-upload-area">
+              <input type="file" id="np-image" accept="image/*" onchange="handleImageUpload(event)">
+              <div class="upload-label">
+                <span class="upload-icon">🖼</span>
+                <span>Click to upload an image</span>
+                <span style="font-size:11px;color:var(--text-hint)">JPG, PNG, GIF, WebP</span>
+              </div>
+            </div>
+          </div>
           <div class="panel-actions">
             <button class="btn-ghost" onclick="toggleNew()">Cancel</button>
             <button class="btn-primary" onclick="publishPost()">Publish</button>
@@ -429,6 +480,7 @@
           <span>${esc(post.date)}</span>
         </div>
         <div class="post-title">${esc(post.title)}</div>
+        ${post.image ? `<img class="post-image" src="${post.image}" alt="${esc(post.title)}">` : ''}
         <div class="post-body">${esc(post.body)}</div>
         <div class="post-footer">
           <span class="comment-count">${post.comments.length} comment${post.comments.length !== 1 ? 's' : ''}</span>
@@ -449,6 +501,7 @@
 
   function toggleNew() {
     S.newOpen = !S.newOpen;
+    if (!S.newOpen) pendingImage = null;
     render();
     if (S.newOpen) document.getElementById('np-title')?.focus();
   }
@@ -460,10 +513,44 @@
     if (!title || !body) { alert('Please fill in a title and body.'); return; }
 
     const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-    S.posts.unshift({ id: S.nid++, title, tag, body, date, comments: [] });
+    S.posts.unshift({ id: S.nid++, title, tag, body, date, image: pendingImage || null, comments: [] });
+    pendingImage = null;
     S.newOpen = false;
     saveState();
     render();
+  }
+
+  function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      pendingImage = ev.target.result;
+      const area = document.getElementById('img-upload-area');
+      if (!area) return;
+      area.classList.add('has-image');
+      area.innerHTML = `
+        <img class="img-preview" src="${pendingImage}" alt="Preview">
+        <button class="img-clear-btn" onclick="clearImage(event)">✕ Remove</button>
+      `;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearImage(e) {
+    e.stopPropagation();
+    pendingImage = null;
+    const area = document.getElementById('img-upload-area');
+    if (!area) return;
+    area.classList.remove('has-image');
+    area.innerHTML = `
+      <input type="file" id="np-image" accept="image/*" onchange="handleImageUpload(event)">
+      <div class="upload-label">
+        <span class="upload-icon">🖼</span>
+        <span>Click to upload an image</span>
+        <span style="font-size:11px;color:var(--text-hint)">JPG, PNG, GIF, WebP</span>
+      </div>
+    `;
   }
 
   function submitComment(pid) {
