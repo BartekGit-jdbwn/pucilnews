@@ -361,13 +361,13 @@
     if (S.user) {
       el.innerHTML = `
         <span class="nav-user">${esc(S.user)}</span>
-        ${isAdmin() ? '<span class="badge-admin">Editor</span>' : ''}
-        <button class="btn-ghost btn-sm" onclick="doLogout()">Sign out</button>
+        ${isAdmin() ? '<span class="badge-admin">Admin</span>' : ''}
+        <button class="btn-ghost btn-sm" onclick="doLogout()">Wyloguj się</button>
       `;
     } else {
       el.innerHTML = `
-        <button onclick="showLogin()">Sign in</button>
-        <button class="btn-primary" onclick="showRegister()">Join free</button>
+        <button onclick="showLogin()">Zaloguj się</button>
+        <button class="btn-primary" onclick="showRegister()">Dołącz za zero ziko</button>
       `;
     }
   }
@@ -432,7 +432,7 @@
     `;
 
     if (S.posts.length === 0) {
-      html += '<div class="empty">No posts yet. Check back soon!</div>';
+      html += '<div class="empty">Nic nie ma, czekajcie!</div>';
     } else {
       S.posts.forEach(p => { html += renderPost(p, !!S.user); });
     }
