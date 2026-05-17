@@ -3,229 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pucił News - #1 zaufane źródło Informacji</title>
+<title>Pucił News - #1 wiadomości na świecie</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #f9f8f5;
-    --surface: #ffffff;
-    --surface2: #f1efe8;
-    --border: rgba(0,0,0,0.12);
-    --border-mid: rgba(0,0,0,0.22);
-    --text: #1a1a18;
-    --text-muted: #5f5e5a;
-    --text-hint: #888780;
-    --accent: #534ab7;
-    --accent-bg: #eeedfe;
-    --accent-text: #3c3489;
-    --radius: 10px;
-    --radius-lg: 14px;
+    --bg: #f9f8f5; --surface: #ffffff; --surface2: #f1efe8;
+    --border: rgba(0,0,0,0.12); --border-mid: rgba(0,0,0,0.22);
+    --text: #1a1a18; --text-muted: #5f5e5a; --text-hint: #888780;
+    --accent: #534ab7; --accent-bg: #eeedfe; --accent-text: #3c3489;
+    --radius: 10px; --radius-lg: 14px;
   }
-
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1a1a18;
-      --surface: #26261f;
-      --surface2: #2c2c2a;
-      --border: rgba(255,255,255,0.1);
-      --border-mid: rgba(255,255,255,0.2);
-      --text: #f1efe8;
-      --text-muted: #b4b2a9;
-      --text-hint: #888780;
-      --accent: #afa9ec;
-      --accent-bg: #26215c;
-      --accent-text: #cecbf6;
+      --bg: #1a1a18; --surface: #26261f; --surface2: #2c2c2a;
+      --border: rgba(255,255,255,0.1); --border-mid: rgba(255,255,255,0.2);
+      --text: #f1efe8; --text-muted: #b4b2a9; --text-hint: #888780;
+      --accent: #afa9ec; --accent-bg: #26215c; --accent-text: #cecbf6;
     }
   }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
 
-  /* ── NAV ── */
-  nav {
-    background: var(--surface);
-    border-bottom: 0.5px solid var(--border);
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+  nav { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
   .nav-brand { font-size: 17px; font-weight: 500; color: var(--text); letter-spacing: -0.3px; }
   .nav-brand span { color: var(--accent); }
   .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .badge-admin {
-    font-size: 11px; font-weight: 500;
-    background: var(--accent-bg); color: var(--accent-text);
-    padding: 2px 8px; border-radius: 20px;
-  }
+  .badge-admin { font-size: 11px; font-weight: 500; background: var(--accent-bg); color: var(--accent-text); padding: 2px 8px; border-radius: 20px; }
   .nav-user { font-size: 13px; color: var(--text-muted); }
 
-  /* ── BUTTONS ── */
-  button {
-    cursor: pointer;
-    font-family: inherit;
-    font-size: 14px;
-    border: 0.5px solid var(--border-mid);
-    border-radius: var(--radius);
-    background: transparent;
-    color: var(--text);
-    padding: 7px 14px;
-    transition: background 0.15s, transform 0.1s;
-  }
+  button { cursor: pointer; font-family: inherit; font-size: 14px; border: 0.5px solid var(--border-mid); border-radius: var(--radius); background: transparent; color: var(--text); padding: 7px 14px; transition: background 0.15s, transform 0.1s; }
   button:hover { background: var(--surface2); }
   button:active { transform: scale(0.98); }
-  .btn-primary {
-    background: var(--accent); color: #fff;
-    border-color: transparent; font-weight: 500;
-  }
+  .btn-primary { background: var(--accent); color: #fff; border-color: transparent; font-weight: 500; }
   .btn-primary:hover { opacity: 0.88; }
   .btn-sm { font-size: 12px; padding: 4px 10px; }
   .btn-ghost { border-color: transparent; color: var(--text-muted); }
   .btn-ghost:hover { color: var(--text); background: var(--surface2); }
 
-  /* ── LAYOUT ── */
   .main { max-width: 740px; margin: 0 auto; padding: 2.5rem 1.5rem; }
 
-  /* ── MODALS ── */
-  .overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.45); z-index: 200;
-    align-items: center; justify-content: center; padding: 1rem;
-  }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .overlay.active { display: flex; }
-  .modal {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg); padding: 2rem;
-    width: 100%; max-width: 400px;
-  }
+  .modal { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 100%; max-width: 400px; }
   .modal h2 { font-size: 18px; font-weight: 500; margin-bottom: 1.25rem; }
   .field { margin-bottom: 1rem; }
   .field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-  .field input, .field textarea, .field select {
-    width: 100%; background: var(--bg);
-    border: 0.5px solid var(--border-mid); border-radius: var(--radius);
-    padding: 9px 12px; font-size: 14px; font-family: inherit;
-    color: var(--text); outline: none; resize: vertical;
-  }
+  .field input, .field textarea { width: 100%; background: var(--bg); border: 0.5px solid var(--border-mid); border-radius: var(--radius); padding: 9px 12px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; resize: vertical; }
   .field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,0.12); }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
   .err { font-size: 12px; color: #a32d2d; margin-top: 6px; min-height: 18px; }
 
-  /* ── AUTH CTA ── */
-  .auth-cta {
-    text-align: center; padding: 3.5rem 2rem;
-    border: 0.5px solid var(--border); border-radius: var(--radius-lg);
-    background: var(--surface); margin-bottom: 2rem;
-  }
+  .auth-cta { text-align: center; padding: 3.5rem 2rem; border: 0.5px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); margin-bottom: 2rem; }
   .auth-cta h1 { font-size: 30px; font-weight: 500; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
   .auth-cta p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 15px; }
   .auth-cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-  /* ── POSTS ── */
-  .section-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 1.5rem;
-  }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
   .section-header h2 { font-size: 20px; font-weight: 500; }
-  .post-card {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem;
-  }
-  .post-meta {
-    font-size: 11px; color: var(--text-hint);
-    margin-bottom: 0.65rem; display: flex; align-items: center; gap: 8px;
-  }
-  .post-tag {
-    font-size: 10px; font-weight: 500;
-    background: var(--accent-bg); color: var(--accent-text);
-    padding: 2px 8px; border-radius: 20px;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
+
+  .post-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; }
+  .post-meta { font-size: 11px; color: var(--text-hint); margin-bottom: 0.65rem; display: flex; align-items: center; gap: 8px; }
+  .post-tag { font-size: 10px; font-weight: 500; background: var(--accent-bg); color: var(--accent-text); padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
   .post-title { font-size: 20px; font-weight: 500; margin-bottom: 0.6rem; letter-spacing: -0.3px; }
   .post-body { font-size: 15px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.1rem; }
-  .post-footer {
-    border-top: 0.5px solid var(--border); padding-top: 0.9rem;
-    display: flex; align-items: center; justify-content: space-between;
-  }
+  .post-footer { border-top: 0.5px solid var(--border); padding-top: 0.9rem; display: flex; align-items: center; justify-content: space-between; }
   .comment-count { font-size: 12px; color: var(--text-hint); }
 
-  /* ── COMMENTS ── */
   .divider { height: 0.5px; background: var(--border); margin: 1rem 0; }
-  .comments-section { }
-  .comment-item {
-    background: var(--surface2); border-radius: 8px;
-    padding: 10px 14px; margin-bottom: 8px;
-  }
+  .comment-item { background: var(--surface2); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; }
   .comment-author { font-size: 12px; font-weight: 500; color: var(--accent-text); margin-bottom: 3px; }
   .comment-text { font-size: 14px; color: var(--text-muted); }
   .comment-form { display: flex; gap: 8px; margin-top: 12px; }
-  .comment-form input {
-    flex: 1; background: var(--bg);
-    border: 0.5px solid var(--border-mid); border-radius: var(--radius);
-    padding: 7px 12px; font-size: 14px; font-family: inherit; color: var(--text); outline: none;
-  }
+  .comment-form input { flex: 1; background: var(--bg); border: 0.5px solid var(--border-mid); border-radius: var(--radius); padding: 7px 12px; font-size: 14px; font-family: inherit; color: var(--text); outline: none; }
   .comment-form input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,0.12); }
 
-  /* ── NEW POST PANEL ── */
-  .new-post-panel {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg); padding: 1.5rem;
-    margin-bottom: 2rem; display: none;
-  }
+  .new-post-panel { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 2rem; display: none; }
   .new-post-panel.active { display: block; }
   .new-post-panel h3 { font-size: 16px; font-weight: 500; margin-bottom: 1rem; }
   .panel-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
 
   .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 15px; }
+  .loading { text-align: center; padding: 3rem 1rem; color: var(--text-hint); font-size: 14px; }
+  @keyframes pulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+  .loading-dot { animation: pulse 1.2s infinite; display: inline-block; }
 
-  /* ── IMAGE UPLOAD ── */
-  .img-upload-area {
-    border: 1.5px dashed var(--border-mid);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    text-align: center;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 13px;
-    transition: border-color 0.15s, background 0.15s;
-    position: relative;
-  }
+  .img-upload-area { border: 1.5px dashed var(--border-mid); border-radius: var(--radius); padding: 1.25rem; text-align: center; cursor: pointer; color: var(--text-muted); font-size: 13px; transition: border-color 0.15s, background 0.15s; position: relative; }
   .img-upload-area:hover { border-color: var(--accent); background: var(--accent-bg); }
   .img-upload-area.has-image { padding: 0; border-style: solid; overflow: hidden; }
-  .img-upload-area input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
+  .img-upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
   .img-upload-area .upload-label { pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
   .img-upload-area .upload-icon { font-size: 22px; opacity: 0.5; }
-  .img-preview {
-    width: 100%; max-height: 220px; object-fit: cover;
-    display: block; border-radius: calc(var(--radius) - 1px);
-  }
-  .img-clear-btn {
-    position: absolute; top: 8px; right: 8px;
-    background: rgba(0,0,0,0.55); color: #fff;
-    border: none; border-radius: 6px;
-    font-size: 11px; padding: 3px 8px; cursor: pointer; z-index: 2;
-  }
+  .img-preview { width: 100%; max-height: 220px; object-fit: cover; display: block; border-radius: calc(var(--radius) - 1px); }
+  .img-clear-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.55); color: #fff; border: none; border-radius: 6px; font-size: 11px; padding: 3px 8px; cursor: pointer; z-index: 2; }
   .img-clear-btn:hover { background: rgba(0,0,0,0.8); }
-
-  /* ── POST IMAGE ── */
-  .post-image {
-    width: 100%; max-height: 380px; object-fit: cover;
-    border-radius: var(--radius);
-    margin-bottom: 1rem;
-    display: block;
-  }
+  .post-image { width: 100%; max-height: 380px; object-fit: cover; border-radius: var(--radius); margin-bottom: 1rem; display: block; }
 
   @media (max-width: 500px) {
     nav { padding: 0 1rem; }
@@ -238,137 +110,118 @@
 </head>
 <body>
 
-<!-- ── NAV ── -->
 <nav>
   <div class="nav-brand">The <span>Pucił News</span></div>
   <div class="nav-right" id="nav-right"></div>
 </nav>
 
-<!-- ── MAIN ── -->
-<div class="main" id="main-content"></div>
+<div class="main" id="main-content">
+  <div class="loading"><span class="loading-dot">●</span> Ładowanie...</div>
+</div>
 
-<!-- ── LOGIN MODAL ── -->
+<!-- LOGIN -->
 <div class="overlay" id="login-overlay">
   <div class="modal">
     <h2>Zaloguj się</h2>
-    <div class="field">
-      <label>Username</label>
-      <input type="text" id="login-user" placeholder="your username" autocomplete="username">
-    </div>
-    <div class="field">
-      <label>Hasłó</label>
-      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
-    </div>
+    <div class="field"><label>Nazwa użytkownika</label><input type="text" id="login-user" placeholder="nazwa użytkownika" autocomplete="username"></div>
+    <div class="field"><label>Hasło</label><input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"></div>
     <div class="err" id="login-err"></div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModals()">Anuluj</button>
-      <button class="btn-primary" onclick="doLogin()">Zaloguj się</button>
+      <button class="btn-primary" onclick="doLogin()">Zaloguj</button>
     </div>
   </div>
 </div>
 
-<!-- ── REGISTER MODAL ── -->
+<!-- REGISTER -->
 <div class="overlay" id="register-overlay">
   <div class="modal">
-    <h2>Stwórz konto</h2>
-    <div class="field">
-      <label>Username</label>
-      <input type="text" id="reg-user" placeholder="choose a username" autocomplete="username">
-    </div>
-    <div class="field">
-      <label>Hasło</label>
-      <input type="password" id="reg-pass" placeholder="at least 4 characters" autocomplete="new-password">
-    </div>
+    <h2>Utwórz konto</h2>
+    <div class="field"><label>Nazwa użytkownika</label><input type="text" id="reg-user" placeholder="wybierz nazwę" autocomplete="username"></div>
+    <div class="field"><label>Hasło</label><input type="password" id="reg-pass" placeholder="min. 4 znaki" autocomplete="new-password"></div>
     <div class="err" id="reg-err"></div>
     <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
-      <button class="btn-primary" onclick="doRegister()">Create account</button>
+      <button class="btn-ghost" onclick="closeModals()">Anuluj</button>
+      <button class="btn-primary" onclick="doRegister()">Utwórz konto</button>
     </div>
   </div>
 </div>
 
-<script>
-  // ── CONFIG ──────────────────────────────────────────────────────────
-  // Change the admin password before deploying!
-  const ADMIN_USERNAME = 'bartek';
-  const ADMIN_PASSWORD = 'bartek123';
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import {
+    getFirestore, collection, doc, setDoc,
+    addDoc, getDocs, updateDoc, arrayUnion,
+    query, orderBy, onSnapshot, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  let pendingImage = null; // base64 data URL for the image being composed
+  // ── CONFIG ────────────────────────────────────────────────────────────
+  const ADMIN_USERNAME = 'admin';
+  const ADMIN_PASSWORD = 'admin123';
 
-  // ── STATE ────────────────────────────────────────────────────────────
-  // Accounts & posts are stored in localStorage so they survive page refreshes.
-  function loadState() {
-    try {
-      const saved = localStorage.getItem('dailybrief_state');
-      if (saved) return JSON.parse(saved);
-    } catch(e) {}
-    return null;
-  }
-
-  function saveState() {
-    try {
-      localStorage.setItem('dailybrief_state', JSON.stringify({
-        accounts: S.accounts,
-        posts: S.posts,
-        nid: S.nid
-      }));
-    } catch(e) {}
-  }
-
-  const saved = loadState();
-
-  const S = {
-    user: null,
-    accounts: saved ? saved.accounts : {
-      [ADMIN_USERNAME]: { password: ADMIN_PASSWORD, isAdmin: true }
-    },
-    posts: saved ? saved.posts : [
-      {
-        id: 1,
-        title: 'Witaj na Pucił News',
-        tag: 'Announcement',
-        body: 'bla bla bla sranie w banie komentujcie pod postami ziomeczki i będzie gitara',
-        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
-        comments: []
-      }
-    ],
-    expanded: new Set(),
-    newOpen: false,
-    nid: saved ? saved.nid : 2
+  const firebaseConfig = {
+    apiKey: "AIzaSyD15B_O4jqeUK0t89bTBZ_eavObf1L6nL4",
+    authDomain: "pucil-news.firebaseapp.com",
+    projectId: "pucil-news",
+    storageBucket: "pucil-news.firebasestorage.app",
+    messagingSenderId: "282146587770",
+    appId: "1:282146587770:web:b9263dcac857b6e5d327c3"
   };
 
-  // ── HELPERS ──────────────────────────────────────────────────────────
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  const postsRef    = collection(db, 'posts');
+  const accountsRef = collection(db, 'accounts');
+
+  // ── STATE ─────────────────────────────────────────────────────────────
+  let currentUser  = sessionStorage.getItem('db_user') || null;
+  let posts        = [];
+  let accounts     = {};
+  let expanded     = new Set();
+  let newOpen      = false;
+  let pendingImage = null;
+  let ready        = false;
+
+  // ── HELPERS ───────────────────────────────────────────────────────────
   function esc(s) {
-    return String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  function isAdmin() { return currentUser && accounts[currentUser]?.isAdmin; }
 
-  function isAdmin() {
-    return S.user && S.accounts[S.user] && S.accounts[S.user].isAdmin;
-  }
+  // ── FIRESTORE LIVE LISTENERS ──────────────────────────────────────────
+  onSnapshot(accountsRef, snap => {
+    accounts = {};
+    snap.forEach(d => { accounts[d.id] = d.data(); });
+    if (!accounts[ADMIN_USERNAME]) {
+      setDoc(doc(db, 'accounts', ADMIN_USERNAME), { password: ADMIN_PASSWORD, isAdmin: true });
+    }
+    ready = true;
+    render();
+  });
 
-  // ── RENDER ───────────────────────────────────────────────────────────
+  onSnapshot(query(postsRef, orderBy('createdAt', 'desc')), snap => {
+    posts = snap.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+    render();
+  });
+
+  // ── RENDER ────────────────────────────────────────────────────────────
   function render() {
+    if (!ready) return;
     renderNav();
     renderMain();
   }
 
   function renderNav() {
     const el = document.getElementById('nav-right');
-    if (S.user) {
+    if (currentUser) {
       el.innerHTML = `
-        <span class="nav-user">${esc(S.user)}</span>
-        ${isAdmin() ? '<span class="badge-admin">Admin</span>' : ''}
-        <button class="btn-ghost btn-sm" onclick="doLogout()">Wyloguj się</button>
-      `;
+        <span class="nav-user">${esc(currentUser)}</span>
+        ${isAdmin() ? '<span class="badge-admin">Editor</span>' : ''}
+        <button class="btn-ghost btn-sm" onclick="doLogout()">Wyloguj</button>`;
     } else {
       el.innerHTML = `
-        <button onclick="showLogin()">Zaloguj się</button>
-        <button class="btn-primary" onclick="showRegister()">Dołącz za zero ziko</button>
-      `;
+        <button onclick="showLogin()">Zaloguj</button>
+        <button class="btn-primary" onclick="showRegister()">Dołącz za darmo</button>`;
     }
   }
 
@@ -376,163 +229,179 @@
     const el = document.getElementById('main-content');
     let html = '';
 
-    if (!S.user) {
+    if (!currentUser) {
       html += `
         <div class="auth-cta">
-          <h1>Zajebiste newsy</h1>
-          <p>Newsy jak świeżutkie bułeczki najnowsze 100% legitne</p>
+          <h1>Pucił news</h1>
+          <p>Absolutny GOAT w kontekście wiadomości, 100% legitne i na czasie</p>
           <div class="auth-cta-btns">
-            <button onclick="showLogin()">Sign in</button>
-            <button class="btn-primary" onclick="showRegister()">Join free — it's free</button>
+            <button onclick="showLogin()">Zaloguj się</button>
+            <button class="btn-primary" onclick="showRegister()">Wbijaj - za zero zł</button>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     if (isAdmin()) {
       html += `
-        <div class="new-post-panel${S.newOpen ? ' active' : ''}" id="npp">
-          <h3>Write a new post</h3>
+        <div class="new-post-panel${newOpen ? ' active' : ''}" id="npp">
+          <h3>Napisz nowy post</h3>
+          <div class="field"><label>Tytuł</label><input type="text" id="np-title" placeholder="Nagłówek posta..."></div>
+          <div class="field"><label>Kategoria</label><input type="text" id="np-tag" placeholder="np. Technologia, Opinia, Newsy"></div>
+          <div class="field"><label>Treść</label><textarea id="np-body" rows="6" placeholder="Napisz swój post tutaj..."></textarea></div>
           <div class="field">
-            <label>Title</label>
-            <input type="text" id="np-title" placeholder="Post headline...">
-          </div>
-          <div class="field">
-            <label>Tag / Category</label>
-            <input type="text" id="np-tag" placeholder="e.g. Technology, Opinion, News">
-          </div>
-          <div class="field">
-            <label>Body</label>
-            <textarea id="np-body" rows="6" placeholder="Write your post here..."></textarea>
-          </div>
-          <div class="field">
-            <label>Cover image (optional)</label>
+            <label>Zdjęcie okładkowe (opcjonalne)</label>
             <div class="img-upload-area" id="img-upload-area">
               <input type="file" id="np-image" accept="image/*" onchange="handleImageUpload(event)">
               <div class="upload-label">
                 <span class="upload-icon">🖼</span>
-                <span>Click to upload an image</span>
+                <span>Kliknij, aby dodać zdjęcie</span>
                 <span style="font-size:11px;color:var(--text-hint)">JPG, PNG, GIF, WebP</span>
               </div>
             </div>
           </div>
           <div class="panel-actions">
-            <button class="btn-ghost" onclick="toggleNew()">Cancel</button>
-            <button class="btn-primary" onclick="publishPost()">Publish</button>
+            <button class="btn-ghost" onclick="toggleNew()">Anuluj</button>
+            <button class="btn-primary" id="publish-btn" onclick="publishPost()">Opublikuj</button>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     html += `
       <div class="section-header">
-        <h2>Latest posts</h2>
-        ${isAdmin() ? `<button class="btn-primary btn-sm" onclick="toggleNew()">+ New post</button>` : ''}
-      </div>
-    `;
+        <h2>Najnowsze posty</h2>
+        ${isAdmin() ? `<button class="btn-primary btn-sm" onclick="toggleNew()">+ Nowy post</button>` : ''}
+      </div>`;
 
-    if (S.posts.length === 0) {
-      html += '<div class="empty">Nic nie ma, czekajcie!</div>';
+    if (posts.length === 0) {
+      html += '<div class="empty">Brak postów. Wróć wkrótce!</div>';
     } else {
-      S.posts.forEach(p => { html += renderPost(p, !!S.user); });
+      posts.forEach(p => { html += renderPost(p, !!currentUser); });
     }
 
     el.innerHTML = html;
   }
 
   function renderPost(post, loggedIn) {
-    const exp = S.expanded.has(post.id);
+    const exp = expanded.has(post.firestoreId);
+    const comments = post.comments || [];
 
     let commSection = '';
     if (exp && loggedIn) {
-      const items = post.comments.length === 0
-        ? `<div style="font-size:13px;color:var(--text-hint);padding:4px 0 12px">No comments yet — be the first!</div>`
-        : post.comments.map(c => `
+      const items = comments.length === 0
+        ? `<div style="font-size:13px;color:var(--text-hint);padding:4px 0 12px">Brak komentarzy — bądź pierwszy!</div>`
+        : comments.map(c => `
             <div class="comment-item">
               <div class="comment-author">${esc(c.author)}</div>
               <div class="comment-text">${esc(c.text)}</div>
-            </div>
-          `).join('');
-
+            </div>`).join('');
       commSection = `
         <div class="divider"></div>
         <div class="comments-section">
           ${items}
           <div class="comment-form">
-            <input type="text" id="ci-${post.id}" placeholder="Napisz komentarz..."
-              onkeydown="if(event.key==='Enter') submitComment(${post.id})">
-            <button class="btn-primary btn-sm" onclick="submitComment(${post.id})">Post</button>
+            <input type="text" id="ci-${post.firestoreId}" placeholder="Napisz komentarz..."
+              onkeydown="if(event.key==='Enter') submitComment('${post.firestoreId}')">
+            <button class="btn-primary btn-sm" onclick="submitComment('${post.firestoreId}')">Wyślij</button>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     const footerRight = loggedIn
-      ? `<button class="btn-ghost btn-sm" onclick="toggleComments(${post.id})">
-           ${exp ? '↑ Hide' : '↓ ' + (post.comments.length > 0 ? 'Zobacz komentarze' : 'Dodaj komentarz')}
+      ? `<button class="btn-ghost btn-sm" onclick="toggleComments('${post.firestoreId}')">
+           ${exp ? '↑ Ukryj' : '↓ ' + (comments.length > 0 ? 'Komentarze' : 'Dodaj komentarz')}
          </button>`
-      : `<button class="btn-ghost btn-sm" onclick="showLogin()">Sign in to comment</button>`;
+      : `<button class="btn-ghost btn-sm" onclick="showLogin()">Zaloguj się, aby komentować</button>`;
+
+    const dateStr = post.createdAt?.toDate
+      ? post.createdAt.toDate().toLocaleDateString('pl-PL', { day: 'numeric', month: 'long', year: 'numeric' })
+      : (post.date || '');
+
+    const n = comments.length;
+    const countLabel = n === 1 ? '1 komentarz' : n < 5 ? `${n} komentarze` : `${n} komentarzy`;
 
     return `
-      <div class="post-card" id="pc-${post.id}">
+      <div class="post-card" id="pc-${post.firestoreId}">
         <div class="post-meta">
           <span class="post-tag">${esc(post.tag)}</span>
-          <span>${esc(post.date)}</span>
+          <span>${esc(dateStr)}</span>
         </div>
         <div class="post-title">${esc(post.title)}</div>
         ${post.image ? `<img class="post-image" src="${post.image}" alt="${esc(post.title)}">` : ''}
         <div class="post-body">${esc(post.body)}</div>
         <div class="post-footer">
-          <span class="comment-count">${post.comments.length} comment${post.comments.length !== 1 ? 's' : ''}</span>
+          <span class="comment-count">${countLabel}</span>
           ${footerRight}
         </div>
         ${commSection}
-      </div>
-    `;
+      </div>`;
   }
 
-  // ── ACTIONS ──────────────────────────────────────────────────────────
+  // ── ACTIONS ───────────────────────────────────────────────────────────
   function toggleComments(id) {
-    S.expanded.has(id) ? S.expanded.delete(id) : S.expanded.add(id);
+    expanded.has(id) ? expanded.delete(id) : expanded.add(id);
     render();
-    const el = document.getElementById('pc-' + id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('pc-' + id)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function toggleNew() {
-    S.newOpen = !S.newOpen;
-    if (!S.newOpen) pendingImage = null;
+    newOpen = !newOpen;
+    if (!newOpen) pendingImage = null;
     render();
-    if (S.newOpen) document.getElementById('np-title')?.focus();
+    if (newOpen) document.getElementById('np-title')?.focus();
   }
 
-  function publishPost() {
+  async function publishPost() {
     const title = (document.getElementById('np-title').value || '').trim();
-    const tag   = (document.getElementById('np-tag').value  || '').trim() || 'General';
+    const tag   = (document.getElementById('np-tag').value  || '').trim() || 'Ogólne';
     const body  = (document.getElementById('np-body').value || '').trim();
-    if (!title || !body) { alert('Please fill in a title and body.'); return; }
+    if (!title || !body) { alert('Uzupełnij tytuł i treść.'); return; }
 
-    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-    S.posts.unshift({ id: S.nid++, title, tag, body, date, image: pendingImage || null, comments: [] });
-    pendingImage = null;
-    S.newOpen = false;
-    saveState();
-    render();
+    const btn = document.getElementById('publish-btn');
+    if (btn) { btn.textContent = 'Publikowanie...'; btn.disabled = true; }
+
+    try {
+      await addDoc(postsRef, {
+        title, tag, body,
+        image: pendingImage || null,
+        comments: [],
+        createdAt: serverTimestamp()
+      });
+      pendingImage = null;
+      newOpen = false;
+    } catch(e) {
+      alert('Błąd: ' + e.message);
+      if (btn) { btn.textContent = 'Opublikuj'; btn.disabled = false; }
+    }
+  }
+
+  async function submitComment(fid) {
+    const inp = document.getElementById('ci-' + fid);
+    const text = (inp?.value || '').trim();
+    if (!text) return;
+    if (inp) { inp.value = ''; inp.disabled = true; }
+    try {
+      await updateDoc(doc(db, 'posts', fid), {
+        comments: arrayUnion({ author: currentUser, text })
+      });
+      expanded.add(fid);
+    } catch(e) {
+      alert('Błąd: ' + e.message);
+    }
+    if (inp) inp.disabled = false;
   }
 
   function handleImageUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = function(ev) {
+    reader.onload = ev => {
       pendingImage = ev.target.result;
       const area = document.getElementById('img-upload-area');
       if (!area) return;
       area.classList.add('has-image');
       area.innerHTML = `
-        <img class="img-preview" src="${pendingImage}" alt="Preview">
-        <button class="img-clear-btn" onclick="clearImage(event)">✕ Remove</button>
-      `;
+        <img class="img-preview" src="${pendingImage}" alt="Podgląd">
+        <button class="img-clear-btn" onclick="clearImage(event)">✕ Usuń</button>`;
     };
     reader.readAsDataURL(file);
   }
@@ -547,87 +416,84 @@
       <input type="file" id="np-image" accept="image/*" onchange="handleImageUpload(event)">
       <div class="upload-label">
         <span class="upload-icon">🖼</span>
-        <span>Click to upload an image</span>
+        <span>Kliknij, aby dodać zdjęcie</span>
         <span style="font-size:11px;color:var(--text-hint)">JPG, PNG, GIF, WebP</span>
-      </div>
-    `;
+      </div>`;
   }
 
-  function submitComment(pid) {
-    const inp = document.getElementById('ci-' + pid);
-    const text = (inp?.value || '').trim();
-    if (!text) return;
-    const post = S.posts.find(p => p.id === pid);
-    if (post) {
-      post.comments.push({ author: S.user, text });
-      saveState();
-    }
-    S.expanded.add(pid);
-    render();
-  }
-
-  // ── AUTH ─────────────────────────────────────────────────────────────
+  // ── AUTH ──────────────────────────────────────────────────────────────
   function showLogin() {
     document.getElementById('login-overlay').classList.add('active');
     setTimeout(() => document.getElementById('login-user').focus(), 50);
   }
-
   function showRegister() {
     document.getElementById('register-overlay').classList.add('active');
     setTimeout(() => document.getElementById('reg-user').focus(), 50);
   }
-
   function closeModals() {
     document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
     document.getElementById('login-err').textContent = '';
     document.getElementById('reg-err').textContent = '';
   }
 
-  function doLogin() {
+  async function doLogin() {
     const u = (document.getElementById('login-user').value || '').trim();
     const p = document.getElementById('login-pass').value;
     const err = document.getElementById('login-err');
-    if (!u || !p) { err.textContent = 'Please fill in all fields.'; return; }
-    const acc = S.accounts[u];
-    if (!acc || acc.password !== p) { err.textContent = 'Nieprawidłowy username/hasło'; return; }
-    S.user = u;
+    if (!u || !p) { err.textContent = 'Uzupełnij wszystkie pola.'; return; }
+    const snap = await getDocs(accountsRef);
+    const fresh = {};
+    snap.forEach(d => { fresh[d.id] = d.data(); });
+    const acc = fresh[u];
+    if (!acc || acc.password !== p) { err.textContent = 'Nieprawidłowa nazwa użytkownika lub hasło.'; return; }
+    currentUser = u;
+    accounts = fresh;
+    sessionStorage.setItem('db_user', u);
     closeModals();
     render();
   }
 
-  function doRegister() {
+  async function doRegister() {
     const u = (document.getElementById('reg-user').value || '').trim();
     const p = document.getElementById('reg-pass').value;
     const err = document.getElementById('reg-err');
-    if (!u || !p) { err.textContent = 'Please fill in all fields.'; return; }
-    if (p.length < 4) { err.textContent = 'Password must be at least 4 characters.'; return; }
-    if (S.accounts[u]) { err.textContent = 'Username already taken.'; return; }
-    if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) { err.textContent = 'That username is reserved.'; return; }
-    S.accounts[u] = { password: p, isAdmin: false };
-    S.user = u;
-    saveState();
-    closeModals();
-    render();
+    if (!u || !p) { err.textContent = 'Uzupełnij wszystkie pola.'; return; }
+    if (p.length < 4) { err.textContent = 'Hasło musi mieć co najmniej 4 znaki.'; return; }
+    if (u.toLowerCase() === ADMIN_USERNAME) { err.textContent = 'Ta nazwa jest zarezerwowana.'; return; }
+    const snap = await getDocs(accountsRef);
+    if (snap.docs.some(d => d.id === u)) { err.textContent = 'Nazwa użytkownika jest już zajęta.'; return; }
+    try {
+      await setDoc(doc(db, 'accounts', u), { password: p, isAdmin: false });
+      currentUser = u;
+      accounts[u] = { password: p, isAdmin: false };
+      sessionStorage.setItem('db_user', u);
+      closeModals();
+      render();
+    } catch(e) {
+      err.textContent = 'Błąd rejestracji: ' + e.message;
+    }
   }
 
   function doLogout() {
-    S.user = null;
-    S.newOpen = false;
+    currentUser = null;
+    newOpen = false;
+    sessionStorage.removeItem('db_user');
     render();
   }
 
-  // Close overlay on backdrop click
-  document.querySelectorAll('.overlay').forEach(el => {
-    el.addEventListener('click', e => { if (e.target === el) closeModals(); });
+  // Expose to inline onclick handlers
+  Object.assign(window, {
+    showLogin, showRegister, closeModals,
+    doLogin, doRegister, doLogout,
+    toggleNew, publishPost,
+    toggleComments, submitComment,
+    handleImageUpload, clearImage
   });
 
-  // Close modals on Escape key
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModals();
-  });
-
-  // ── INIT ─────────────────────────────────────────────────────────────
-  render();
+  document.querySelectorAll('.overlay').forEach(el =>
+    el.addEventListener('click', e => { if (e.target === el) closeModals(); })
+  );
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModals(); });
 </script>
 </body>
 </html>
