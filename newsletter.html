@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daily Brief — Newsletter</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f9f8f5;
+    --surface: #ffffff;
+    --surface2: #f1efe8;
+    --border: rgba(0,0,0,0.12);
+    --border-mid: rgba(0,0,0,0.22);
+    --text: #1a1a18;
+    --text-muted: #5f5e5a;
+    --text-hint: #888780;
+    --accent: #534ab7;
+    --accent-bg: #eeedfe;
+    --accent-text: #3c3489;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18;
+      --surface: #26261f;
+      --surface2: #2c2c2a;
+      --border: rgba(255,255,255,0.1);
+      --border-mid: rgba(255,255,255,0.2);
+      --text: #f1efe8;
+      --text-muted: #b4b2a9;
+      --text-hint: #888780;
+      --accent: #afa9ec;
+      --accent-bg: #26215c;
+      --accent-text: #cecbf6;
+    }
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--surface);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand { font-size: 17px; font-weight: 500; color: var(--text); letter-spacing: -0.3px; }
+  .nav-brand span { color: var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge-admin {
+    font-size: 11px; font-weight: 500;
+    background: var(--accent-bg); color: var(--accent-text);
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .nav-user { font-size: 13px; color: var(--text-muted); }
+
+  /* ── BUTTONS ── */
+  button {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    border: 0.5px solid var(--border-mid);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text);
+    padding: 7px 14px;
+    transition: background 0.15s, transform 0.1s;
+  }
+  button:hover { background: var(--surface2); }
+  button:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    border-color: transparent; font-weight: 500;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-sm { font-size: 12px; padding: 4px 10px; }
+  .btn-ghost { border-color: transparent; color: var(--text-muted); }
+  .btn-ghost:hover { color: var(--text); background: var(--surface2); }
+
+  /* ── LAYOUT ── */
+  .main { max-width: 740px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+  /* ── MODALS ── */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45); z-index: 200;
+    align-items: center; justify-content: center; padding: 1rem;
+  }
+  .overlay.active { display: flex; }
+  .modal {
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2rem;
+    width: 100%; max-width: 400px;
+  }
+  .modal h2 { font-size: 18px; font-weight: 500; margin-bottom: 1.25rem; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .field input, .field textarea, .field select {
+    width: 100%; background: var(--bg);
+    border: 0.5px solid var(--border-mid); border-radius: var(--radius);
+    padding: 9px 12px; font-size: 14px; font-family: inherit;
+    color: var(--text); outline: none; resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,0.12); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
+  .err { font-size: 12px; color: #a32d2d; margin-top: 6px; min-height: 18px; }
+  .hint-text { font-size: 11px; color: var(--text-hint); margin-top: 10px; }
+
+  /* ── AUTH CTA ── */
+  .auth-cta {
+    text-align: center; padding: 3.5rem 2rem;
+    border: 0.5px solid var(--border); border-radius: var(--radius-lg);
+    background: var(--surface); margin-bottom: 2rem;
+  }
+  .auth-cta h1 { font-size: 30px; font-weight: 500; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+  .auth-cta p { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 15px; }
+  .auth-cta-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* ── POSTS ── */
+  .section-header {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 1.5rem;
+  }
+  .section-header h2 { font-size: 20px; font-weight: 500; }
+  .post-card {
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem;
+  }
+  .post-meta {
+    font-size: 11px; color: var(--text-hint);
+    margin-bottom: 0.65rem; display: flex; align-items: center; gap: 8px;
+  }
+  .post-tag {
+    font-size: 10px; font-weight: 500;
+    background: var(--accent-bg); color: var(--accent-text);
+    padding: 2px 8px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .post-title { font-size: 20px; font-weight: 500; margin-bottom: 0.6rem; letter-spacing: -0.3px; }
+  .post-body { font-size: 15px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.1rem; }
+  .post-footer {
+    border-top: 0.5px solid var(--border); padding-top: 0.9rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .comment-count { font-size: 12px; color: var(--text-hint); }
+
+  /* ── COMMENTS ── */
+  .divider { height: 0.5px; background: var(--border); margin: 1rem 0; }
+  .comments-section { }
+  .comment-item {
+    background: var(--surface2); border-radius: 8px;
+    padding: 10px 14px; margin-bottom: 8px;
+  }
+  .comment-author { font-size: 12px; font-weight: 500; color: var(--accent-text); margin-bottom: 3px; }
+  .comment-text { font-size: 14px; color: var(--text-muted); }
+  .comment-form { display: flex; gap: 8px; margin-top: 12px; }
+  .comment-form input {
+    flex: 1; background: var(--bg);
+    border: 0.5px solid var(--border-mid); border-radius: var(--radius);
+    padding: 7px 12px; font-size: 14px; font-family: inherit; color: var(--text); outline: none;
+  }
+  .comment-form input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,0.12); }
+
+  /* ── NEW POST PANEL ── */
+  .new-post-panel {
+    background: var(--surface); border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+    margin-bottom: 2rem; display: none;
+  }
+  .new-post-panel.active { display: block; }
+  .new-post-panel h3 { font-size: 16px; font-weight: 500; margin-bottom: 1rem; }
+  .panel-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; }
+
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 15px; }
+
+  @media (max-width: 500px) {
+    nav { padding: 0 1rem; }
+    .main { padding: 1.5rem 1rem; }
+    .auth-cta { padding: 2.5rem 1rem; }
+    .auth-cta h1 { font-size: 24px; }
+    .post-title { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-brand">The <span>Daily Brief</span></div>
+  <div class="nav-right" id="nav-right"></div>
+</nav>
+
+<!-- ── MAIN ── -->
+<div class="main" id="main-content"></div>
+
+<!-- ── LOGIN MODAL ── -->
+<div class="overlay" id="login-overlay">
+  <div class="modal">
+    <h2>Sign in</h2>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="your username" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div class="err" id="login-err"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" onclick="doLogin()">Sign in</button>
+    </div>
+    <p class="hint-text">Admin credentials: <strong>admin</strong> / <strong>admin123</strong> — change these in the script before deploying.</p>
+  </div>
+</div>
+
+<!-- ── REGISTER MODAL ── -->
+<div class="overlay" id="register-overlay">
+  <div class="modal">
+    <h2>Create account</h2>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="reg-user" placeholder="choose a username" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="reg-pass" placeholder="at least 4 characters" autocomplete="new-password">
+    </div>
+    <div class="err" id="reg-err"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" onclick="doRegister()">Create account</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────────────────
+  // Change the admin password before deploying!
+  const ADMIN_USERNAME = 'admin';
+  const ADMIN_PASSWORD = 'admin123';
+
+  // ── STATE ────────────────────────────────────────────────────────────
+  // Accounts & posts are stored in localStorage so they survive page refreshes.
+  function loadState() {
+    try {
+      const saved = localStorage.getItem('dailybrief_state');
+      if (saved) return JSON.parse(saved);
+    } catch(e) {}
+    return null;
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem('dailybrief_state', JSON.stringify({
+        accounts: S.accounts,
+        posts: S.posts,
+        nid: S.nid
+      }));
+    } catch(e) {}
+  }
+
+  const saved = loadState();
+
+  const S = {
+    user: null,
+    accounts: saved ? saved.accounts : {
+      [ADMIN_USERNAME]: { password: ADMIN_PASSWORD, isAdmin: true }
+    },
+    posts: saved ? saved.posts : [
+      {
+        id: 1,
+        title: 'Welcome to The Daily Brief',
+        tag: 'Announcement',
+        body: 'Hello and welcome! This is your go-to place for curated insights, stories, and ideas. New editions drop regularly — create an account to join the conversation and leave comments on any post.',
+        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+        comments: []
+      }
+    ],
+    expanded: new Set(),
+    newOpen: false,
+    nid: saved ? saved.nid : 2
+  };
+
+  // ── HELPERS ──────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function isAdmin() {
+    return S.user && S.accounts[S.user] && S.accounts[S.user].isAdmin;
+  }
+
+  // ── RENDER ───────────────────────────────────────────────────────────
+  function render() {
+    renderNav();
+    renderMain();
+  }
+
+  function renderNav() {
+    const el = document.getElementById('nav-right');
+    if (S.user) {
+      el.innerHTML = `
+        <span class="nav-user">${esc(S.user)}</span>
+        ${isAdmin() ? '<span class="badge-admin">Editor</span>' : ''}
+        <button class="btn-ghost btn-sm" onclick="doLogout()">Sign out</button>
+      `;
+    } else {
+      el.innerHTML = `
+        <button onclick="showLogin()">Sign in</button>
+        <button class="btn-primary" onclick="showRegister()">Join free</button>
+      `;
+    }
+  }
+
+  function renderMain() {
+    const el = document.getElementById('main-content');
+    let html = '';
+
+    if (!S.user) {
+      html += `
+        <div class="auth-cta">
+          <h1>Ideas worth reading.</h1>
+          <p>A newsletter for curious minds. Sign up to read,<br>comment, and join the conversation.</p>
+          <div class="auth-cta-btns">
+            <button onclick="showLogin()">Sign in</button>
+            <button class="btn-primary" onclick="showRegister()">Join free — it's free</button>
+          </div>
+        </div>
+      `;
+    }
+
+    if (isAdmin()) {
+      html += `
+        <div class="new-post-panel${S.newOpen ? ' active' : ''}" id="npp">
+          <h3>Write a new post</h3>
+          <div class="field">
+            <label>Title</label>
+            <input type="text" id="np-title" placeholder="Post headline...">
+          </div>
+          <div class="field">
+            <label>Tag / Category</label>
+            <input type="text" id="np-tag" placeholder="e.g. Technology, Opinion, News">
+          </div>
+          <div class="field">
+            <label>Body</label>
+            <textarea id="np-body" rows="6" placeholder="Write your post here..."></textarea>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-ghost" onclick="toggleNew()">Cancel</button>
+            <button class="btn-primary" onclick="publishPost()">Publish</button>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `
+      <div class="section-header">
+        <h2>Latest posts</h2>
+        ${isAdmin() ? `<button class="btn-primary btn-sm" onclick="toggleNew()">+ New post</button>` : ''}
+      </div>
+    `;
+
+    if (S.posts.length === 0) {
+      html += '<div class="empty">No posts yet. Check back soon!</div>';
+    } else {
+      S.posts.forEach(p => { html += renderPost(p, !!S.user); });
+    }
+
+    el.innerHTML = html;
+  }
+
+  function renderPost(post, loggedIn) {
+    const exp = S.expanded.has(post.id);
+
+    let commSection = '';
+    if (exp && loggedIn) {
+      const items = post.comments.length === 0
+        ? `<div style="font-size:13px;color:var(--text-hint);padding:4px 0 12px">No comments yet — be the first!</div>`
+        : post.comments.map(c => `
+            <div class="comment-item">
+              <div class="comment-author">${esc(c.author)}</div>
+              <div class="comment-text">${esc(c.text)}</div>
+            </div>
+          `).join('');
+
+      commSection = `
+        <div class="divider"></div>
+        <div class="comments-section">
+          ${items}
+          <div class="comment-form">
+            <input type="text" id="ci-${post.id}" placeholder="Write a comment..."
+              onkeydown="if(event.key==='Enter') submitComment(${post.id})">
+            <button class="btn-primary btn-sm" onclick="submitComment(${post.id})">Post</button>
+          </div>
+        </div>
+      `;
+    }
+
+    const footerRight = loggedIn
+      ? `<button class="btn-ghost btn-sm" onclick="toggleComments(${post.id})">
+           ${exp ? '↑ Hide' : '↓ ' + (post.comments.length > 0 ? 'View comments' : 'Add comment')}
+         </button>`
+      : `<button class="btn-ghost btn-sm" onclick="showLogin()">Sign in to comment</button>`;
+
+    return `
+      <div class="post-card" id="pc-${post.id}">
+        <div class="post-meta">
+          <span class="post-tag">${esc(post.tag)}</span>
+          <span>${esc(post.date)}</span>
+        </div>
+        <div class="post-title">${esc(post.title)}</div>
+        <div class="post-body">${esc(post.body)}</div>
+        <div class="post-footer">
+          <span class="comment-count">${post.comments.length} comment${post.comments.length !== 1 ? 's' : ''}</span>
+          ${footerRight}
+        </div>
+        ${commSection}
+      </div>
+    `;
+  }
+
+  // ── ACTIONS ──────────────────────────────────────────────────────────
+  function toggleComments(id) {
+    S.expanded.has(id) ? S.expanded.delete(id) : S.expanded.add(id);
+    render();
+    const el = document.getElementById('pc-' + id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function toggleNew() {
+    S.newOpen = !S.newOpen;
+    render();
+    if (S.newOpen) document.getElementById('np-title')?.focus();
+  }
+
+  function publishPost() {
+    const title = (document.getElementById('np-title').value || '').trim();
+    const tag   = (document.getElementById('np-tag').value  || '').trim() || 'General';
+    const body  = (document.getElementById('np-body').value || '').trim();
+    if (!title || !body) { alert('Please fill in a title and body.'); return; }
+
+    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    S.posts.unshift({ id: S.nid++, title, tag, body, date, comments: [] });
+    S.newOpen = false;
+    saveState();
+    render();
+  }
+
+  function submitComment(pid) {
+    const inp = document.getElementById('ci-' + pid);
+    const text = (inp?.value || '').trim();
+    if (!text) return;
+    const post = S.posts.find(p => p.id === pid);
+    if (post) {
+      post.comments.push({ author: S.user, text });
+      saveState();
+    }
+    S.expanded.add(pid);
+    render();
+  }
+
+  // ── AUTH ─────────────────────────────────────────────────────────────
+  function showLogin() {
+    document.getElementById('login-overlay').classList.add('active');
+    setTimeout(() => document.getElementById('login-user').focus(), 50);
+  }
+
+  function showRegister() {
+    document.getElementById('register-overlay').classList.add('active');
+    setTimeout(() => document.getElementById('reg-user').focus(), 50);
+  }
+
+  function closeModals() {
+    document.querySelectorAll('.overlay').forEach(o => o.classList.remove('active'));
+    document.getElementById('login-err').textContent = '';
+    document.getElementById('reg-err').textContent = '';
+  }
+
+  function doLogin() {
+    const u = (document.getElementById('login-user').value || '').trim();
+    const p = document.getElementById('login-pass').value;
+    const err = document.getElementById('login-err');
+    if (!u || !p) { err.textContent = 'Please fill in all fields.'; return; }
+    const acc = S.accounts[u];
+    if (!acc || acc.password !== p) { err.textContent = 'Incorrect username or password.'; return; }
+    S.user = u;
+    closeModals();
+    render();
+  }
+
+  function doRegister() {
+    const u = (document.getElementById('reg-user').value || '').trim();
+    const p = document.getElementById('reg-pass').value;
+    const err = document.getElementById('reg-err');
+    if (!u || !p) { err.textContent = 'Please fill in all fields.'; return; }
+    if (p.length < 4) { err.textContent = 'Password must be at least 4 characters.'; return; }
+    if (S.accounts[u]) { err.textContent = 'Username already taken.'; return; }
+    if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) { err.textContent = 'That username is reserved.'; return; }
+    S.accounts[u] = { password: p, isAdmin: false };
+    S.user = u;
+    saveState();
+    closeModals();
+    render();
+  }
+
+  function doLogout() {
+    S.user = null;
+    S.newOpen = false;
+    render();
+  }
+
+  // Close overlay on backdrop click
+  document.querySelectorAll('.overlay').forEach(el => {
+    el.addEventListener('click', e => { if (e.target === el) closeModals(); });
+  });
+
+  // Close modals on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModals();
+  });
+
+  // ── INIT ─────────────────────────────────────────────────────────────
+  render();
+</script>
+</body>
+</html>
